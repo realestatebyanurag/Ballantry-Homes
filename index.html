@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Ballantry Homes - Spring Valley Pricing Calculator</title>
+    <style>
+        :root {
+            --primary-color: #1e3f20;
+            --secondary-color: #2e6132;
+            --bg-color: #f4f6f4;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0 0 5px 0;
+            font-size: 24px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (max-width: 850px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-box {
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: #fff;
+            font-size: 16px; 
+            margin-bottom: 10px;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group {
+            max-height: 270px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            padding: 5px;
+            background: #fff;
+            border-radius: 6px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 8px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+
+        .checkbox-item.mandatory {
+            background-color: #f9f9f9;
+            cursor: not-allowed;
+        }
+
+        .checkbox-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"]:disabled {
+            cursor: not-allowed;
+        }
+
+        .checkbox-item label {
+            font-weight: normal;
+            margin-bottom: 0;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .checkbox-item.mandatory label {
+            cursor: not-allowed;
+            font-weight: 600;
+        }
+
+        .summary-panel {
+            background: var(--primary-color);
+            color: #fff;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 15px;
+            height: fit-content;
+        }
+
+        .summary-panel h2 {
+            color: #fff;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 22px;
+            font-weight: bold;
+            border-top: 2px solid #fff;
+            padding-top: 15px;
+            margin-top: 15px;
+            color: #e2f0d9;
+        }
+
+        .incentive-tag {
+            background: rgba(255,255,255,0.15);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-top: 8px;
+            border-left: 4px solid #e2f0d9;
+        }
+
+        .footnote {
+            font-size: 11px;
+            color: #666;
+            margin-top: 25px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>BALLANTRY HOMES</h1>
+        <h2>Spring Valley Village Pricing Calculator</h2>
+        <p style="margin: 0; font-size: 13px; color: #555;">38' Lot Single Detached Homes</p>
+    </header>
+
+    <div class="grid">
+        
+        <!-- Left Column: Controls Section -->
+        <div>
+            <!-- Step 1: Model Selection Dropdown -->
+            <div class="section-box">
+                <label for="modelSelect">1. Select Home Model & Elevation</label>
+                <select id="modelSelect">
+                    <option value="">-- Choose a Model --</option>
+                    <option value="creek_a" data-model="Creekside" data-elev="A" data-base="1276990">Creekside (Elevation A) - 2,917 Sq.Ft. ($1,276,990)</option>
+                    <option value="creek_b" data-model="Creekside" data-elev="B" data-base="1290990">Creekside (Elevation B) - 2,924 Sq.Ft. ($1,290,990)</option>
+                    <option value="creek_c" data-model="Creekside" data-elev="C" data-base="1268990">Creekside (Elevation C) - 2,923 Sq.Ft. ($1,268,990)</option>
+                    <option value="sweet_a" data-model="Sweetwater" data-elev="A" data-base="1281990">Sweetwater (Elevation A) - 3,033 Sq.Ft. ($1,281,990)</option>
+                    <option value="sweet_b" data-model="Sweetwater" data-elev="B" data-base="1286989">Sweetwater (Elevation B) - 3,022 Sq.Ft. ($1,286,989)</option>
+                    <option value="sweet_c" data-model="Sweetwater" data-elev="C" data-base="1274990">Sweetwater (Elevation C) - 3,023 Sq.Ft. ($1,274,990)</option>
+                    <option value="brook_a" data-model="Brookfall" data-elev="A" data-base="1297990">Brookfall (Elevation A) - 3,116 Sq.Ft. ($1,297,990)</option>
+                    <option value="brook_b" data-model="Brookfall" data-elev="B" data-base="1311990">Brookfall (Elevation B) - 3,114 Sq.Ft. ($1,311,990)</option>
+                    <option value="brook_c" data-model="Brookfall" data-elev="C" data-base="1290990">Brookfall (Elevation C) - 3,113 Sq.Ft. ($1,290,990)</option>
+                    <option value="mill_a" data-model="Millpond" data-elev="A" data-base="1301990">Millpond (Elevation A) - 3,218 Sq.Ft. ($1,301,990)</option>
+                    <option value="mill_b" data-model="Millpond" data-elev="B" data-base="1318990">Millpond (Elevation B) - 3,230 Sq.Ft. ($1,318,990)</option>
+                    <option value="mill_c" data-model="Millpond" data-elev="C" data-base="1292990">Millpond (Elevation C) - 3,222 Sq.Ft. ($1,292,990)</option>
+                    <option value="spring_a" data-model="Springhollow" data-elev="A" data-base="1332990">Springhollow (Elevation A) - 3,247 Sq.Ft. ($1,332,990)</option>
+                    <option value="spring_b" data-model="Springhollow" data-elev="B" data-base="1332990">Springhollow (Elevation B) - 3,247 Sq.Ft. ($1,332,990)</option>
+                    <option value="spring_c" data-model="Springhollow" data-elev="C" data-base="1322990">Springhollow (Elevation C) - 3,230 Sq.Ft. ($1,322,990)</option>
+                </select>
+            </div>
+
+            <!-- Step 2: Lot Selection Dropdown -->
+            <div class="section-box">
+                <label for="lotSelect">2. Select an Available Lot</label>
+                <select id="lotSelect">
+                    <option value="0" data-prem="0">-- Choose an Available Lot --</option>
+                    <option value="1" data-prem="28250">Lot 1 (Walkout Basement Premium: $28,250)</option>
+                    <option value="2" data-prem="28250">Lot 2 (Walkout Basement Premium: $28,250)</option>
+                    <option value="3" data-prem="28250">Lot 3 (Walkout Basement Premium: $28,250)</option>
+                    <option value="6" data-prem="28250">Lot 6 (Walkout Basement Premium: $28,250)</option>
+                    <option value="7" data-prem="28250">Lot 7 (Walkout Basement Premium: $28,250)</option>
+                    <option value="8" data-prem="28250">Lot 8 (Walkout Basement Premium: $28,250)</option>
+                    <option value="9" data-prem="28250">Lot 9 (Walkout Basement Premium: $28,250)</option>
+                    <option value="10" data-prem="28250">Lot 10 (Walkout Basement Premium: $28,250)</option>
+                    <option value="11" data-prem="28250">Lot 11 (Walkout Basement Premium: $28,250)</option>
+                    <option value="19" data-prem="0">Lot 19 (No Premium / $0)</option>
+                    <option value="23" data-prem="0">Lot 23 (No Premium / $0)</option>
+                    <option value="24" data-prem="0">Lot 24 (No Premium / $0)</option>
+                    <option value="25" data-prem="0">Lot 25 (No Premium / $0)</option>
+                    <option value="27" data-prem="10000">Lot 27 (Lot Premium: $10,000)</option>
+                </select>
+            </div>
+
+            <!-- Step 3: Upgrades List Wrapper -->
+            <div class="section-box">
+                <label>3. Architect's Choice Options</label>
+                <div id="optionsContainer" class="checkbox-group">
+                    <p style="color: #888; font-style: italic; margin: 10px;">Please choose a specific home model layout above first to display its valid options.</p>
+                </div>
+            </div>
+
+            <!-- Step 4: Appliance Costs Layout -->
+            <div class="section-box">
+                <label>4. Appliance Costs</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="app_ac" value="6000" class="appliance-cb">
+                        <label for="app_ac">A/C Air Conditioner (+$6,000.00)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="app_kitchen" value="15000" class="appliance-cb">
+                        <label for="app_kitchen">Kitchen Appliances, Washer & Dryer (+$15,000.00)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Closing Costs Layout -->
+            <div class="section-box">
+                <label>5. Estimated Closing Adjustments</label>
+                <div class="checkbox-group">
+                    <!-- Mandatory Dynamic Land Transfer Tax Item -->
+                    <div class="checkbox-item mandatory">
+                        <input type="checkbox" id="close_ltt" class="closing-cb" checked disabled>
+                        <label for="close_ltt" id="lbl_ltt">Ontario Land Transfer Tax (Calculated dynamically...)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="close_drive" value="1000" class="closing-cb" checked>
+                        <label for="close_drive">Driveway Paving Fee (+$1,000.00)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="close_dmg" value="1000" class="closing-cb" checked>
+                        <label for="close_dmg">Damage Deposit (Subject to adjustment) (+$1,000.00)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="close_water" value="577.48" class="closing-cb" checked>
+                        <label for="close_water">Water Meter Fee (+$577.48)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="close_hydro" value="500" class="closing-cb" checked>
+                        <label for="close_hydro">Hydro Meter Fee (+$500.00)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="close_law" value="65" class="closing-cb" checked>
+                        <label for="close_law">Law Society Transaction Levy (+$65.00)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="close_tax" value="500" class="closing-cb" checked>
+                        <label for="close_tax">Land Realty Taxes Readjustment (+$500.00)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="close_reg" value="475" class="closing-cb" checked>
+                        <label for="close_reg">Electronic Registration Fee (+$475.00)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Sticky Summary Panel Box -->
+        <div>
+            <div class="section-box summary-panel">
+                <h2>Price Summary</h2>
+                
+                <div class="summary-row">
+                    <span>Base Model Price:</span>
+                    <span id="sumBase">$0</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span>Lot Premium:</span>
+                    <span id="sumLot">$0</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span>Selected Upgrades:</span>
+                    <span id="sumOptions">$0</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Appliance Costs:</span>
+                    <span id="sumAppliances">$0</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Closing Adjustments:</span>
+                    <span id="sumClosing">$0</span>
+                </div>
+
+                <div class="summary-total">
+                    <span>Estimated Total:</span>
+                    <span id="sumTotal">$0</span>
+                </div>
+
+                <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;">
+                    <div style="font-weight: bold; margin-bottom: 5px; color: #e2f0d9;">Included VIP Incentives:</div>
+                    <div class="incentive-tag">🎁 $15,000 Décor Studio Dollars included!</div>
+                    <div class="incentive-tag">🛡️ Capped Development Charges at $0!</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="footnote">
+        *Prices for models include HST Rebate for qualified buyers. Architect's Choice Options exclude HST. Must be purchased within 10 days of signing at the Sales Office. Price structures accurate to May 28, 2026 documents. Land Transfer Tax figures reflect progressive Ontario legal structures outside Toronto city boundaries. E.& O.E.
+    </div>
+</div>
+
+<script>
+const optionsData = {
+    "Creekside": [
+        { name: "Optional Ground Floor with Den", price: 4975 },
+        { name: "Optional Enclosed Staircase", price: 1185 },
+        { name: "Optional Side Door (where grading permits)", price: 4875 },
+        { name: "Optional Finished Basement", price: 59995 },
+		{ name: "Optional 10' Mainfloor Ceilings", price: 30000 }
+    ],
+    "Sweetwater": [
+        { name: "Optional Ground Floor with Den", price: 3600 },
+        { name: "Optional Enclosed Staircase", price: 1185 },
+        { name: "Optional Side Door (where grading permits)", price: 4875 },
+        { name: "Optional Finished Basement", price: 60995 },
+		{ name: "Optional 10' Mainfloor Ceilings", price: 30000 }
+    ],
+    "Brookfall": [
+        { name: "Optional Ground Floor with Den", price: 6295 },
+        { name: "Optional Enclosed Staircase", price: 1185 },
+        { name: "Optional Side Door (where grading permits)", price: 4875 },
+        { name: "Optional 2nd Floor with 5 Bedrooms", price: 5200 },
+        { name: "Optional Bedroom 3 Ensuite (req. 5-bed plan)", price: 16500 },
+        { name: "Optional Kitchen Layout", price: 3485 },
+        { name: "Optional Finished Basement", price: 61995 },
+		{ name: "Optional 10' Mainfloor Ceilings", price: 30000 }
+    ],
+    "Millpond": [
+        { name: "Optional Ground Floor with Den", price: 5795 },
+        { name: "Optional Side Door (where grading permits)", price: 4875 },
+        { name: "Optional 2nd Floor with 5 Bedrooms", price: 6995 },
+        { name: "Optional Finished Basement", price: 62995 },
+        { name: "Optional Finished Basement with Legal Secondary Suite", price: 94995 },
+        { name: "Optional Spice Kitchen", price: 9995 },
+		{ name: "Optional 10' Mainfloor Ceilings", price: 30000 }
+    ],
+    "Springhollow": [
+        { name: "Optional Ground Floor with Den", price: 4200 },
+        { name: "Optional Enclosed Staircase", price: 1185 },
+        { name: "Optional Side Door (where grading permits)", price: 5140 },
+        { name: "Optional Finished Basement", price: 62995 },
+        { name: "Optional Finished Basement with Legal Secondary Suite", price: 94995 },
+		{ name: "Optional 10' Mainfloor Ceilings", price: 30000 }
+    ]
+};
+
+// Complete lot dataset extracted straight from WhatsApp Image 2026-06-06 at 4.53.43 PM.jpg and WhatsApp Image 2026-06-06 at 4.53.43 PM (1).jpeg
+const lotRegistry = [
+    { lot: "1", prem: 28250, desc: "Lot 1 (Walkout Basement Premium: $28,250)", models: { Creekside: ["B", "C"], Sweetwater: ["A", "B", "C"], Brookfall: ["A", "B", "C"], Millpond: ["B", "C"], Springhollow: ["A", "B", "C"] } },
+    { lot: "2", prem: 28250, desc: "Lot 2 (Walkout Basement Premium: $28,250)", models: { Creekside: ["C"], Sweetwater: ["A", "B", "C"], Brookfall: ["A", "B", "C"], Millpond: ["A", "B"], Springhollow: ["A", "B", "C"] } },
+    { lot: "3", prem: 28250, desc: "Lot 3 (Walkout Basement Premium: $28,250)", models: { Creekside: ["C"], Sweetwater: ["A", "B", "C"], Brookfall: ["A", "B", "C"], Millpond: ["A", "B", "C"], Springhollow: ["A", "B", "C"] } },
+    { lot: "6", prem: 28250, desc: "Lot 6 (Walkout Basement Premium: $28,250)", models: { Sweetwater: ["A", "B", "C"], Brookfall: ["A", "B", "C"], Millpond: ["A", "B"], Springhollow: ["A", "B", "C"] } },
+    { lot: "7", prem: 28250, desc: "Lot 7 (Walkout Basement Premium: $28,250)", models: { Creekside: ["C"] } },
+    { lot: "8", prem: 28250, desc: "Lot 8 (Walkout Basement Premium: $28,250)", models: { Creekside: ["A"] } },
+    { lot: "9", prem: 28250, desc: "Lot 9 (Walkout Basement Premium: $28,250)", models: { Creekside: ["B"] } },
+    { lot: "10", prem: 28250, desc: "Lot 10 (Walkout Basement Premium: $28,250)", models: { Sweetwater: ["A", "B", "C"], Brookfall: ["B", "C"], Millpond: ["A", "B", "C"], Springhollow: ["C"] } },
+    { lot: "11", prem: 28250, desc: "Lot 11 (Walkout Basement Premium: $28,250)", models: { Creekside: ["C"], Sweetwater: ["A", "B", "C"], Brookfall: ["B"], Millpond: ["A", "B", "C"], Springhollow: ["C"] } },
+    { lot: "19", prem: 0, desc: "Lot 19 (No Premium / $0)", models: { Creekside: ["C"], Sweetwater: ["A", "B", "C"], Brookfall: ["B"], Millpond: ["A", "B", "C"], Springhollow: ["A", "C"] } },
+    { lot: "23", prem: 0, desc: "Lot 23 (No Premium / $0)", models: { Sweetwater: ["A", "B", "C"], Brookfall: ["A", "B"], Millpond: ["A", "B", "C"], Springhollow: ["A", "C"] } },
+    { lot: "24", prem: 0, desc: "Lot 24 (No Premium / $0)", models: { Creekside: ["A", "C"], Sweetwater: ["A", "B", "C"], Brookfall: ["A", "B"], Millpond: ["A", "B", "C"], Springhollow: ["A", "C"] } },
+    { lot: "25", prem: 0, desc: "Lot 25 (No Premium / $0)", models: { Creekside: ["A", "C"], Sweetwater: ["A", "B", "C"], Brookfall: ["A", "B", "C"], Millpond: ["A", "B"], Springhollow: ["A", "C"] } },
+    { lot: "27", prem: 10000, desc: "Lot 27 (Lot Premium: $10,000)", models: { Creekside: ["A", "C"], Sweetwater: ["A", "B", "C"], Brookfall: ["A", "B", "C"], Millpond: ["B"], Springhollow: ["A", "B", "C"] } }
+];
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("modelSelect").addEventListener("change", function() {
+        updateOptionsAndPricing();
+        updateAvailableLots();
+    });
+    document.getElementById("lotSelect").addEventListener("change", calculateTotal);
+    
+    document.querySelectorAll('.appliance-cb, .closing-cb').forEach(cb => {
+        cb.addEventListener('change', calculateTotal);
+    });
+    
+    calculateTotal();
+});
+
+function updateAvailableLots() {
+    const modelSelect = document.getElementById("modelSelect");
+    const lotSelect = document.getElementById("lotSelect");
+    
+    // Remember currently picked lot option before refreshing list
+    const previouslySelectedLotValue = lotSelect.value;
+    
+    // Clear menu options
+    lotSelect.innerHTML = "";
+
+    if (modelSelect.selectedIndex <= 0) {
+        const placeholderOpt = document.createElement("option");
+        placeholderOpt.value = "0";
+        placeholderOpt.setAttribute("data-prem", "0");
+        placeholderOpt.textContent = "-- Choose an Available Lot --";
+        lotSelect.appendChild(placeholderOpt);
+        return;
+    }
+
+    const selectedOption = modelSelect.options[modelSelect.selectedIndex];
+    const modelName = selectedOption.getAttribute("data-model");
+    const modelElev = selectedOption.getAttribute("data-elev");
+
+    // Reconstruct placeholder selection
+    const placeholderOpt = document.createElement("option");
+    placeholderOpt.value = "0";
+    placeholderOpt.setAttribute("data-prem", "0");
+    placeholderOpt.textContent = "-- Choose an Available Lot --";
+    lotSelect.appendChild(placeholderOpt);
+
+    let matchFound = false;
+
+    // Filter registry matching this model and elevation profile
+    lotRegistry.forEach(lotItem => {
+        const allowedElevations = lotItem.models[modelName];
+        if (allowedElevations && allowedElevations.includes(modelElev)) {
+            const opt = document.createElement("option");
+            opt.value = lotItem.lot;
+            opt.setAttribute("data-prem", lotItem.prem);
+            opt.textContent = lotItem.desc;
+            
+            // Re-select if it was active previously
+            if (lotItem.lot === previouslySelectedLotValue) {
+                opt.selected = true;
+                matchFound = true;
+            }
+            
+            lotSelect.appendChild(opt);
+        }
+    });
+
+    // Reset default if selection is no longer valid for this new model configuration
+    if (!matchFound) {
+        lotSelect.value = "0";
+    }
+}
+
+function updateOptionsAndPricing() {
+    const modelSelect = document.getElementById("modelSelect");
+    if (modelSelect.selectedIndex < 0) return;
+    
+    const selectedOption = modelSelect.options[modelSelect.selectedIndex];
+    const modelName = selectedOption.getAttribute("data-model");
+    const container = document.getElementById("optionsContainer");
+    
+    container.innerHTML = "";
+    
+    if (!modelName || !optionsData[modelName]) {
+        container.innerHTML = '<p style="color: #888; font-style: italic; margin: 10px;">Please choose a specific home model layout above first to display its valid options.</p>';
+        calculateTotal();
+        return;
+    }
+    
+    optionsData[modelName].forEach((opt, index) => {
+        const div = document.createElement("div");
+        div.className = "checkbox-item";
+        
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `opt_${index}`;
+        checkbox.value = opt.price;
+        checkbox.addEventListener("change", calculateTotal);
+        
+        const label = document.createElement("label");
+        label.htmlFor = `opt_${index}`;
+        label.textContent = `${opt.name} (+$${opt.price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})})`;
+        
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        container.appendChild(div);
+    });
+    
+    calculateTotal();
+}
+
+/**
+ * Calculates progressive Ontario Provincial Land Transfer Tax (LTT) 
+ * for Single Family Residential Properties
+ */
+function calculateOntarioLTT(purchasePrice) {
+    if (purchasePrice <= 0) return 0;
+    
+    let tax = 0;
+    
+    // 0.5% on first $55,000
+    if (purchasePrice > 55000) {
+        tax += 55000 * 0.005;
+    } else {
+        return purchasePrice * 0.005;
+    }
+    
+    // 1.0% from $55,000.01 to $250,000
+    if (purchasePrice > 250000) {
+        tax += (250000 - 55000) * 0.01;
+    } else {
+        tax += (purchasePrice - 55000) * 0.01;
+        return tax;
+    }
+    
+    // 1.5% from $250,000.01 to $400,000
+    if (purchasePrice > 400000) {
+        tax += (400000 - 250000) * 0.015;
+    } else {
+        tax += (purchasePrice - 250000) * 0.015;
+        return tax;
+    }
+    
+    // 2.0% from $400,000.01 to $2,000,000
+    if (purchasePrice > 2000000) {
+        tax += (2000000 - 400000) * 0.02;
+        // 2.5% on portion exceeding $2,000,000
+        tax += (purchasePrice - 2000000) * 0.025;
+    } else {
+        tax += (purchasePrice - 400000) * 0.02;
+    }
+    
+    return tax;
+}
+
+function calculateTotal() {
+    // 1. Base Model Price
+    const modelSelect = document.getElementById("modelSelect");
+    let basePrice = 0;
+    if (modelSelect.selectedIndex >= 0) {
+        const selectedModel = modelSelect.options[modelSelect.selectedIndex];
+        const val = selectedModel.getAttribute("data-base");
+        if (val) basePrice = parseFloat(val);
+    }
+    
+    // 2. Lot Premium
+    const lotSelect = document.getElementById("lotSelect");
+    let lotPremium = 0;
+    if (lotSelect.selectedIndex >= 0) {
+        const selectedLot = lotSelect.options[lotSelect.selectedIndex];
+        const val = selectedLot.getAttribute("data-prem");
+        if (val) lotPremium = parseFloat(val);
+    }
+    
+    // 3. Architect Choices
+    let optionsTotal = 0;
+    const checkboxes = document.querySelectorAll('#optionsContainer input[type="checkbox"]');
+    checkboxes.forEach(cb => {
+        if (cb.checked) {
+            optionsTotal += parseFloat(cb.value);
+        }
+    });
+
+    // Calculate Purchase Price base to dictate tax obligations
+    const purchasePriceBase = basePrice + lotPremium + optionsTotal;
+    
+    // 4. Compute Dynamic Land Transfer Tax
+    const calculatedLTT = calculateOntarioLTT(purchasePriceBase);
+    
+    // Update the layout checkbox text directly
+    const lttLabel = document.getElementById("lbl_ltt");
+    if (purchasePriceBase > 0) {
+        lttLabel.textContent = `Ontario Land Transfer Tax (Mandatory) (+$${calculatedLTT.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})})`;
+    } else {
+        lttLabel.textContent = `Ontario Land Transfer Tax (Mandatory) ($0.00)`;
+    }
+
+    // 5. Appliance costs
+    let applianceTotal = 0;
+    document.querySelectorAll('.appliance-cb').forEach(cb => {
+        if (cb.checked) {
+            applianceTotal += parseFloat(cb.value);
+        }
+    });
+
+    // 6. Closing costs values (including mandatory calculated LTT)
+    let closingTotal = calculatedLTT; 
+    document.querySelectorAll('.closing-cb').forEach(cb => {
+        // Skip the LTT checkbox here to prevent double addition since we initialized closingTotal with it
+        if (cb.checked && cb.id !== 'close_ltt') {
+            closingTotal += parseFloat(cb.value);
+        }
+    });
+    
+    const grandTotal = purchasePriceBase + applianceTotal + closingTotal;
+    
+    // Formatter
+    const fmt = num => num > 0 ? `$${num.toLocaleString(undefined, {minimumFractionDigits: num % 1 === 0 ? 0 : 2, maximumFractionDigits: 2})}` : "$0";
+
+    // Redraw summary views
+    document.getElementById("sumBase").textContent = fmt(basePrice);
+    document.getElementById("sumLot").textContent = fmt(lotPremium);
+    document.getElementById("sumOptions").textContent = fmt(optionsTotal);
+    document.getElementById("sumAppliances").textContent = fmt(applianceTotal);
+    document.getElementById("sumClosing").textContent = fmt(closingTotal);
+    document.getElementById("sumTotal").textContent = fmt(grandTotal);
+}
+</script>
+
+</body>
+</html>
